@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Proof of Stake Voting System</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f2f5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1a73e8;
+      color: white;
+      width: 100%;
+      padding: 1rem 0;
+      text-align: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .container {
+      background: white;
+      margin-top: 2rem;
+      padding: 2rem;
+      border-radius: 10px;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      margin-bottom: 1.5rem;
+      color: #333;
+      text-align: center;
+    }
+
+    input, textarea, button {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    button:hover {
+      background-color: #1558b0;
+    }
+
+    .response {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #333;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      margin-top: auto;
+      padding: 1rem;
+      text-align: center;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>PoS Voting System</h1>
+  </header>
+
+  <div class="container">
+    <h2>Cast Your Vote</h2>
+    <form id="voteForm">
+      <textarea id="sender" placeholder="Your Public Key (PEM)" rows="4" required></textarea>
+      <input type="text" id="voteFor" placeholder="Candidate Name" required />
+      <textarea id="signature" placeholder="Signature (Hex)" rows="4" required></textarea>
+      <button type="submit">Submit Vote</button>
+    </form>
+    <div class="response" id="response"></div>
+  </div>
+
+  <footer>
+    &copy; 2025 Blockchain Voting Co.
+  </footer>
+
+  <script>
+    document.getElementById("voteForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+
+      const sender = document.getElementById("sender").value.trim();
+      const voteFor = document.getElementById("voteFor").value.trim();
+      const signature = document.getElementById("signature").value.trim();
+      const responseDiv = document.getElementById("response");
+
+      responseDiv.textContent = "Submitting vote...";
+
+      const payload = {
+        transaction: {
+          senderPublicKey: sender,
+          voteFor,
+          type: "VOTE",
+          signature
+        }
+      };
+
+      try {
+        const res = await fetch("http://localhost:8000/api/vote/", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await res.json();
+        responseDiv.textContent = "✅ Response: " + JSON.stringify(data, null, 2);
+      } catch (err) {
+        responseDiv.textContent = "❌ Error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>
