@@ -24,12 +24,12 @@ This project demonstrates a **Proof of Stake (PoS)**-based secure voting mechani
 ## 🧰 Project Structure
 
 pos-voting-system/
-├── app/
-│ ├── main.py # FastAPI entry point
-│ ├── routes/vote.py # Vote endpoint
-│ ├── utils/crypto.py # Signature verification logic
-│ ├── models/wallet.py # Wallet (key generation & signing)
-│ └── data/voters.py # Predefined voter stakes & keys
+
+├── main.py # FastAPI entry point
+├── routes/vote.py # Vote endpoint
+├── utils/crypto.py # Signature verification logic
+├── models/wallet.py # Wallet (key generation & signing)
+└── data/voters.py # Predefined voter stakes & keys
 ├── frontend/
 │ └── index.html # UI for submitting vote
 ├── requirements.txt # Dependencies
