@@ -1,83 +1,90 @@
-# 🗳️ Proof-of-Stake Voting System
+# 🗳️ PoS-Based Voting System using Blockchain (FastAPI + RSA)
 
-A decentralized voting system built using Python and FastAPI where voters participate by signing their votes with RSA-based public-private key pairs. The influence of a vote is determined by the **stake** each voter holds.
+This project demonstrates a **Proof of Stake (PoS)**-based secure voting mechanism where each voter's stake determines their voting weight. It uses **RSA public/private keys** for identity and signature verification to ensure that each vote is authenticated, unique, and tamper-proof.
 
----
 
-## 📦 Features
+## 🚀 Features
 
-- ✅ **Stake-based Voting Power**: Each voter has a predefined stake that determines their vote weight.
-- 🔐 **Cryptographic Signature Verification**: Every vote is digitally signed with the voter's private key and verified using their public key.
-- 🗂️ **Voter Registry**: Only registered voters with public keys are allowed to vote.
-- 🚫 **Double Voting Prevention**: Once a voter casts their vote, they are marked as `has_voted: True`.
-- 🌐 **CORS-enabled API**: Built with FastAPI and can communicate with frontend clients via REST.
+- 🔒 RSA key-based voter identity and signature verification
+- 🧠 Stake-weighted voting
+- 📜 Prevention of duplicate votes
+- ⚡ FastAPI backend
+- 💻 HTML + JS frontend
+- 🧪 Cryptographic vote validation
 
----
 
-## 🔧 Project Structure
+## 🔐 Security Measures
 
-pos-voting/
+- **Voter Public Key Registry**: Only pre-registered public keys can vote
+- **Digital Signature**: Every vote is signed with voter's private key and verified using RSA
+- **One Vote per Voter**: A flag prevents double voting
+- **Vote Weighting**: Each vote carries a stake value (e.g., 50, 40, etc.)
+
+
+## 🧰 Project Structure
+
+pos-voting-system/
 ├── app/
-│ ├── main.py # FastAPI app initialization
-│ ├── routes/
-│ │ └── vote.py # Vote endpoint logic
-│ ├── data/
-│ │ └── voters.py # Voter registry with stakes
-│ ├── utils/
-│ │ └── crypto.py # Signature verification logic
-│ └── wallet/
-│ └── wallet.py # Wallet class to generate keys and signatures
-├── sample_txn.py # Script to generate sample voters and votes
-├── static/
-│ └── index.html # Frontend vote submission form
-└── README.md # This file
+│ ├── main.py # FastAPI entry point
+│ ├── routes/vote.py # Vote endpoint
+│ ├── utils/crypto.py # Signature verification logic
+│ ├── models/wallet.py # Wallet (key generation & signing)
+│ └── data/voters.py # Predefined voter stakes & keys
+├── frontend/
+│ └── index.html # UI for submitting vote
+├── requirements.txt # Dependencies
+└── README.md
 
 
----
+## ⚙️ How to Run the Project
 
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Python 3.8+
-- Install dependencies:
+### 🐍 1. Setup Python environment
 
 ```bash
-pip install fastapi uvicorn pycryptodome
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
 
+▶️ 2. Run FastAPI server
 
-🧠 Security Measures Implemented
-| Area                      | Measure                                                              |
-| ------------------------- | -------------------------------------------------------------------- |
-| 🔏 Authentication         | Votes must be signed with voter's private key                        |
-| 🧾 Signature Verification | Backend uses `SHA256 + RSA` to verify that sender signed the message |
-| 🔒 Voter Whitelisting     | Only registered voters with known public keys can cast a vote        |
-| ⛔ Double Voting Block     | Voters can only vote once (`has_voted = True` after voting)          |
-| 📊 Weighted Votes         | Each voter's vote is weighted by their "stake" value                 |
+cd app
+uvicorn main:app --reload --port 8000
 
-{
-  "transaction": {
-    "senderPublicKey": "-----BEGIN PUBLIC KEY-----\\nMIGfMA0G...QAB\\n-----END PUBLIC KEY-----",
-    "voteFor": "Alice",
-    "type": "VOTE",
-    "signature": "4ba87e98...fede70"
-  }
-}
+The API will be available at: http://localhost:8000
 
-🌍 API Endpoint
-| Method | URL      | Description                    |
-| ------ | -------- | ------------------------------ |
-| POST   | `/vote/` | Submits a vote for a candidate |
+🌐 3. Open Frontend
+Just open frontend/index.html in a browser. Make sure you're using the correct API URL in the fetch() call (e.g., http://localhost:8000/vote/).
 
-📈 Future Enhancements
- Add a /results/ endpoint to tally votes by stake.
+📥 Example Dependencies (requirements.txt)
 
- Include vote deadlines.
+fastapi
+uvicorn
+pycryptodome
+pydantic
 
- Add persistent storage (DB or blockchain-like ledger).
+🧪 Example Flow
+A wallet is generated for a voter.
 
- Show real-time voting stats on frontend.
+Voter signs the message:
 
- Anonymous voting option using zero-knowledge proof (ZKP).
+message = public_key + candidate_name + "VOTE"
+Frontend sends { senderPublicKey, voteFor, signature } to backend.
 
-Developed by Uzair-1006
+Backend verifies signature, checks registry, and accepts or rejects the vote.
+
+📌 Future Improvements
+Candidate registration & results endpoint
+
+Frontend vote history
+
+Database integration (SQLite/Postgres)
+
+Blockchain integration for vote immutability
+
+🛡️ Disclaimer
+This is an educational prototype. Real-world voting systems require much more rigorous security, auditing, and legal oversight.
+
+🧑‍💻 Developed by
+Shaik Uzair Ahmed
+Uzair-1006 : Github Id
+
